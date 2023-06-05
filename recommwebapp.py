@@ -29,14 +29,30 @@ def hello():
 
 print("building recommendation engine")
 print("reading songs data ")
-songs_metadata_file = 'https://static.turi.com/datasets/millionsong/song_data.csv'
-songs_df =  pd.read_csv(songs_metadata_file)
+#songs_metadata_file = 'https://'
+dataset_file = r"C:\Users\HP\Downloads\Music Info.csv\song_data.csv"
+song_df =  pd.read_csv(dataset_file)
 print("done")
 
+#Removing Duplicates
+#First, let us check if there are any duplicate Song titles.
+#These are redundant to the algorithm and must be removed
+print("removing Duplicates")
+song_df.duplicated(subset='title').sum() # 297,571
+print("Duplicate successfully removed.")
+
+#Random Sampling
+#we need to randomly sample 15,000 rows from the dataframe to avoid running into memory errors:
+#sample_size = 15000
+song_df = song_df.sample(n=sample_size, replace=False, random_state=490)
+
+song_df = song_df.reset_index()
+song_df = song_df.drop('index',axis=1)
 
 
 print("reading user data about songs")
-triplets_file = 'https://static.turi.com/datasets/millionsong/10000.txt'
+#triplets_file = 'https:'
+triplets_file = r"C:\Users\HP\Downloads\Music Info.csv\10000.txt"
 songs_to_user_df = pd.read_table(triplets_file,header=None)
 songs_to_user_df.columns = ['user_id', 'song_id', 'listen_count']
 print("done")
@@ -44,7 +60,7 @@ print("done")
 
 
 print("merging songs and user data")
-combined_songs_df = pd.merge(songs_to_user_df, songs_df, on='song_id')
+combined_songs_df = pd.merge(songs_to_user_df, song_df, on='song_id')
 print("done")
 
 print("creating pivot table")
@@ -58,7 +74,7 @@ SVD  = TruncatedSVD(n_components=20, random_state=17)
 result_matrix = SVD.fit_transform(X)
 print("done")
 
-print("crerating pearson corff matrix")
+print("crerating pearson coorelation matrix")
 corr_mat = np.corrcoef(result_matrix)
 corr_mat.shape
 print("done")
