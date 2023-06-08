@@ -43,7 +43,7 @@ print("Duplicate successfully removed.")
 
 #Random Sampling
 #we need to randomly sample 15,000 rows from the dataframe to avoid running into memory errors:
-#sample_size = 15000
+sample_size = 15000
 song_df = song_df.sample(n=sample_size, replace=False, random_state=490)
 
 song_df = song_df.reset_index()
