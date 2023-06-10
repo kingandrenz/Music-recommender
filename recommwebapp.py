@@ -96,7 +96,7 @@ def getRecommendations(songName):
 	max=5
 	if(len(recList)<5):
 		max=len(recList)
-	return songs_df[songs_df.title.isin(recList)]
+	return song_df[song_df.title.isin(recList)]
 
 
 
@@ -107,7 +107,7 @@ def rec():
 		print("inside post")
 		print(str(request.form.get('query')))
 		query = request.form.get('query')
-		#print("the book name is " + query)
+		#print("the song name is " + query)
 		recommendations = getRecommendations(query)
 		#print(query)
 		return render_template('rec.html', query=query, recommendations=recommendations.to_html())
